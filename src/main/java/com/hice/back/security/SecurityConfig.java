@@ -38,7 +38,7 @@ public class SecurityConfig {
 				.and()
 				.csrf().disable()
 				.authorizeHttpRequests()
-				.antMatchers("/Archivo/Voz/**","file:./Archivo/Voz/").permitAll()
+				.antMatchers("/Archivo/Voz/**","file:./Archivo/Voz/","/Archivo/Proyecto/**","file:./Archivo/Proyecto/").permitAll()
 				.anyRequest().authenticated()
 				.and()
 	            .httpBasic()
@@ -81,11 +81,11 @@ public class SecurityConfig {
 			
 	}
 	
-	/*METODO PARA ENCRYPTAR Y VER LA PASSWORD*/
+	/*METODO PARA ENCRYPTAR Y VER LA PASSWORD
 	public static void main(String[] args) {
 		
 		System.out.println("Pasword is: "+ new BCryptPasswordEncoder().encode("charles"));
-	}
+	}*/
 	
 	
 

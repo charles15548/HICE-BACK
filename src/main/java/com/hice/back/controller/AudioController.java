@@ -70,7 +70,7 @@ public class AudioController {
 
 	}
 	@PutMapping("/{id}")
-	public ResponseEntity<Map<String, Object>> editarAudio(@PathVariable Integer id,@RequestParam("audioParam") String audios,
+	public ResponseEntity<Map<String, Object>> EditarAudio(@PathVariable Integer id,@RequestParam("audioParam") String audios,
 			@RequestParam(value = "audioFile", required = false) MultipartFile file ) throws IOException {
 
 		JsonReader reader = new JsonReader(new StringReader(audios));

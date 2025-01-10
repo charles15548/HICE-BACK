@@ -21,8 +21,14 @@ public class SpringApiRestHiceApplication {
 	    public class WebConfig implements WebMvcConfigurer {
 	        @Override
 	        public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	         
+	            // Exponer la carpeta "Archivo//Voz//"
 	            registry.addResourceHandler("/Archivo/Voz/**")
-	                .addResourceLocations("file:./Archivo/Voz/");
+	                    .addResourceLocations("file:./Archivo/Voz/");
+
+	            // Exponer la carpeta "Archivo//Proyecto//"
+	            registry.addResourceHandler("/Archivo/Proyecto/**")
+	                    .addResourceLocations("file:./Archivo/Proyecto/");
 	        }
 	    }
 
