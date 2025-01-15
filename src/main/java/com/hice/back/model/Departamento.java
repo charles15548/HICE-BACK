@@ -19,7 +19,7 @@ public class Departamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     
-    @Column(name = "id_departamento", nullable = false)
+    @Column(name = "id_departamento")
     private Integer idDepartamento;
 
     private String nombre;

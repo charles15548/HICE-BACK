@@ -31,6 +31,6 @@ public class Personaje {
 
     @ManyToOne
     @JoinColumn(name = "id_proyecto", insertable = false, updatable = false)
-    private Usuario objPersonajeProyecto;
+    private Proyecto proyecto;
 
 }

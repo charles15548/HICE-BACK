@@ -38,7 +38,9 @@ public class SecurityConfig {
 				.and()
 				.csrf().disable()
 				.authorizeHttpRequests()
-				.antMatchers("/Archivo/Voz/**","file:./Archivo/Voz/","/Archivo/Proyecto/**","file:./Archivo/Proyecto/").permitAll()
+				.antMatchers("/Archivo/Voz/**","file:./Archivo/Voz/",
+						"/Archivo/Proyecto/**","file:./Archivo/Proyecto/",
+						"/Archivo/Personaje/**", "file:./Archivo/Personaje").permitAll()
 				.anyRequest().authenticated()
 				.and()
 	            .httpBasic()

@@ -12,6 +12,7 @@ public interface AudioService {
 
 
 	public ResponseEntity<Map<String, Object>> listarAudio();
+	public ResponseEntity<Map<String, Object>> findAudiosByProyectoAndPersonaje(Integer idProyecto, Integer idPersonaje);
 	public ResponseEntity<Map<String, Object>> listarAudioPorId(Integer id);
 	public ResponseEntity<Map<String, Object>> CrearAudio(Audio audio);
 	public ResponseEntity<Map<String, Object>> EditarAudio(Audio audio,Integer id);

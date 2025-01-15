@@ -31,5 +31,5 @@ public class Audio {
 	
 	@ManyToOne
     @JoinColumn(name = "id_personaje" ,insertable = false, updatable = false)
-    private Pais objAudioPersonaje;
+    private Personaje personaje;
 }

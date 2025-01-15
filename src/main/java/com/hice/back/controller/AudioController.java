@@ -3,6 +3,7 @@ package com.hice.back.controller;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,6 +28,7 @@ import com.google.gson.stream.JsonReader;
 import com.hice.back.model.Audio;
 import com.hice.back.model.Usuario;
 import com.hice.back.service.AudioService;
+import com.hice.back.serviceImpl.AudioServiceImplement;
 import com.hice.back.serviceImpl.UploadService;
 
 @RestController
@@ -36,12 +38,36 @@ public class AudioController {
 	@Autowired
 	private AudioService audioService;
 	@Autowired
+	private AudioServiceImplement implement;
+	@Autowired
 	private UploadService upload;
 
 	@GetMapping()
 	public ResponseEntity<Map<String, Object>> listarAudio() {
 		return audioService.listarAudio();
 	}
+	
+/*	
+ @GetMapping("/proyecto/{idProyecto}/personaje/{idPersonaje}")
+    public ResponseEntity<List<Audio>> getAudiosByProyectoAndPersonaje(
+            @PathVariable int idProyecto, 
+            @PathVariable int idPersonaje) {
+        List<Audio> audios = implement.getAudiosByProyectoAndPersonaje(idProyecto, idPersonaje);
+        if (audios.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(audios);
+    }
+    */
+	
+	
+	@GetMapping("/proyecto/{idProyecto}/personaje/{idPersonaje}")
+    public ResponseEntity<Map<String, Object>> getAudioByProyectoAndPersonaje(
+            @PathVariable int idProyecto, 
+            @PathVariable int idPersonaje) {
+       
+        return audioService.findAudiosByProyectoAndPersonaje(idProyecto, idPersonaje);
+    }
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Map<String, Object>> listarAudioPorId(@PathVariable Integer id) {
@@ -65,7 +91,7 @@ public class AudioController {
 		Audio audio = gson.fromJson(audios, Audio.class);
 		String nombreAudio = upload.saveAudio(file);
 		audio.setVoz(nombreAudio);
-		audio.setIdPersonaje(1);
+	;
 		return audioService.CrearAudio(audio);
 
 	}
@@ -86,7 +112,7 @@ public class AudioController {
 		//audio.setIdAudio(audioVacio.getIdAudio());
 		//audio.setNombre(audioVacio.getNombre());
 		//audio.setDescripcion(audioVacio.getDescripcion());
-		audio.setIdPersonaje(1);
+		audio.setIdPersonaje(audioVacio.getIdPersonaje());
 
 		
 		

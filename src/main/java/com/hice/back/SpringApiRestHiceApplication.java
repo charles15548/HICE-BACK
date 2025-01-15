@@ -29,6 +29,9 @@ public class SpringApiRestHiceApplication {
 	            // Exponer la carpeta "Archivo//Proyecto//"
 	            registry.addResourceHandler("/Archivo/Proyecto/**")
 	                    .addResourceLocations("file:./Archivo/Proyecto/");
+	            
+	            registry.addResourceHandler("/Archivo/Personaje/**")
+	            		.addResourceLocations("file:./Archivo/Personaje/");
 	        }
 	    }
 

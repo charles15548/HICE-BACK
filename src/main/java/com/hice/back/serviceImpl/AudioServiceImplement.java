@@ -43,7 +43,30 @@ public class AudioServiceImplement implements AudioService{
 		}
 		
 	}
+	@Override
+	public ResponseEntity<Map<String, Object>> findAudiosByProyectoAndPersonaje(Integer idProyecto,
+			Integer idPersonaje) {
+		Map<String, Object> respuesta = new HashMap<>();
+		List<Audio> audio = dao.findAudiosByProyectoAndPersonaje(idProyecto, idPersonaje);
+		if(!audio.isEmpty()) {
+			respuesta.put("mensaje", "Lista de audios por proyecto y personaje");
+			respuesta.put("Audio", audio);
+			respuesta.put("fecha", new Date());
+			respuesta.put("status", HttpStatus.OK);
+			return ResponseEntity.status(HttpStatus.OK).body(respuesta);
+		}else {
+			respuesta.put("mensaje", "No existen audios por proyecto y personaje");
+			respuesta.put("status", HttpStatus.NOT_FOUND);
+			respuesta.put("fecha", new Date());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(respuesta);
+		}
+	}
 
+/*public List<Audio> getAudiosByProyectoAndPersonaje(int idProyecto, int idPersonaje) {
+	     return dao.findAudiosByProyectoAndPersonaje(idProyecto, idPersonaje);
+	}
+	*/
+	
 	@Override
 	public ResponseEntity<Map<String, Object>> CrearAudio(Audio audio) {
 		Map<String, Object> respuesta = new HashMap<>();
@@ -166,6 +189,8 @@ public class AudioServiceImplement implements AudioService{
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(r);
 		}
 	}
+
+	
 
 	
 	

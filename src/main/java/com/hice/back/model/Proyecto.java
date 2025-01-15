@@ -24,7 +24,7 @@ public class Proyecto {
     private String nombre;
     private String descripcion;
 
-    @Column(name = "img_proyecto", nullable = false, length = 500)
+    @Column(name = "img_proyecto")
     private String imgProyecto;
     
     @Column(name = "id_usuario")

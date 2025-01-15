@@ -1,5 +1,6 @@
 package com.hice.back.serviceImpl;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -51,8 +52,8 @@ public class ProyectoServiceImplement implements ProyectoService{
 		Map<String, Object> respuesta = new HashMap<>();
 		Optional<Proyecto> proyecto = dao.findById(id);
 		if(proyecto.isPresent()) {
-			respuesta.put("mensaje", "audios "+ id +"existe");
-			respuesta.put("Proyeto", proyecto);
+			respuesta.put("mensaje", "proyecto "+ id +" existe");
+			respuesta.put("Proyecto", proyecto);
 			respuesta.put("fecha", new Date());
 			respuesta.put("status", HttpStatus.OK);
 			return ResponseEntity.status(HttpStatus.OK).body(respuesta);
@@ -66,9 +67,28 @@ public class ProyectoServiceImplement implements ProyectoService{
 
 	
 	@Override
-	public ResponseEntity<Map<String, Object>> EliminarProyecto(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<Map<String, Object>> EliminarProyecto(Integer id, String nombreProyecto) throws IOException {
+		
+		Map<String, Object> respuesta = new HashMap<>();
+		
+		Optional<Proyecto> proyecto = dao.findById(id);
+		if(proyecto.isPresent()) {
+			Proyecto p = proyecto.get();
+			dao.delete(p);
+			deleteImg(nombreProyecto);
+			
+			respuesta.put("mensaje","Proyecto eliminado con id:  "+ id  );
+			respuesta.put("status", HttpStatus.NO_CONTENT);
+			respuesta.put("fecha", new Date());
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(respuesta);
+		}else{
+			respuesta.put("mensaje","No encontramos el proyecto:  "+ id  );
+			respuesta.put("status", HttpStatus.NOT_FOUND);
+			respuesta.put("fecha", new Date());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(respuesta);
+		}
+		
+		
 	}
 
 	/*@Override
@@ -100,25 +120,9 @@ public class ProyectoServiceImplement implements ProyectoService{
 	@Override
 	public ResponseEntity<Map<String, Object>> AgregarProyecto(Proyecto proyecto, MultipartFile file) throws IOException {
 		Map<String, Object> respuesta = new HashMap<>();
-		String nombreImagen;
-		if(file != null && !file.isEmpty()) {
-			Path folderPath = Paths.get(folderProyecto);
-			if(!Files.exists(folderPath)) {
-				Files.createDirectories(folderPath);
-			}
-			
-			
-			String uniqueFileName = System.currentTimeMillis()+ "_"+ file.getOriginalFilename();
-			Path filePath = folderPath.resolve(uniqueFileName);
-			
-			byte[] bytes = file.getBytes();
-			Files.write(filePath, bytes);
-			nombreImagen = uniqueFileName;
-		}else {
-			nombreImagen = "default.jpg";
-		}
 		
 		
+		String nombreImagen = manejarArchivo(file);
 		Proyecto nuevoProyecto = new Proyecto();
 		nuevoProyecto.setDescripcion(proyecto.getDescripcion());
 		nuevoProyecto.setNombre(proyecto.getNombre());
@@ -139,24 +143,26 @@ public class ProyectoServiceImplement implements ProyectoService{
 	public ResponseEntity<Map<String, Object>> EditarProyecto(Proyecto proyectoEntrada,MultipartFile file, Integer id) throws IOException{
 		Map<String, Object> respuesta = new HashMap<>();
 		String nombreImagen;
-		if(file != null && !file.isEmpty()) {
-			Path folderPath = Paths.get(folderProyecto);
-			
-			
-			
-			String uniqueFileName = System.currentTimeMillis()+ "_"+ file.getOriginalFilename();
-			Path filePath = folderPath.resolve(uniqueFileName);
-			
-			byte[] bytes = file.getBytes();
-			Files.write(filePath, bytes);
-			nombreImagen = uniqueFileName;
-		}else {
-			nombreImagen = proyectoEntrada.getImgProyecto();
-		}
+		
+		
+		  
 		
 		Optional<Proyecto> proyectoPresente = dao.findById(id);
 		if(proyectoPresente.isPresent()) {
-			Proyecto proyecto = proyectoPresente.get();
+			Proyecto proyecto = proyectoPresente.get(); 
+			String imgdelete = proyecto.getImgProyecto();
+			if (file != null && !file.isEmpty()) {
+					deleteImg(imgdelete);
+				
+				nombreImagen = manejarArchivo(file);
+				
+			}
+				else {
+				nombreImagen = proyecto.getImgProyecto();
+				}
+			
+			
+			
 			proyecto.setNombre(proyectoEntrada.getNombre());
 			proyecto.setDescripcion(proyectoEntrada.getDescripcion());
 			proyecto.setImgProyecto(nombreImagen);
@@ -177,6 +183,35 @@ public class ProyectoServiceImplement implements ProyectoService{
 		}
 	}
 
-	
+	private String manejarArchivo(MultipartFile file) throws IOException {
+	    if (file != null && !file.isEmpty()) {
+	        
+	    	
+	    	
+	    	Path folderPath = Paths.get(folderProyecto);
+	        if (!Files.exists(folderPath)) {
+	            Files.createDirectories(folderPath);
+	        }
+	        String uniqueFileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+	        Path filePath = folderPath.resolve(uniqueFileName);
+	        Files.write(filePath, file.getBytes());
+	        return uniqueFileName;
+	    }
+	    return "default.jpg";
+	}
+
+	public void deleteImg(String fileName) throws IOException {
+	       String ruta=folderProyecto;
+	       File file = new File(ruta + fileName);
+	       if(!fileName.equals("default.jpg")) {
+	    	   file.delete();
+			}
+	      
+	   
+	   }
+	@Override
+	public Optional<Proyecto> get(Integer id) {
+		return dao.findById(id);
+	}
 
 }

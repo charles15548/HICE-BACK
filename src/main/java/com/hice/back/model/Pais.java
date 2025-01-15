@@ -19,7 +19,7 @@ public class Pais {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     
-    @Column(name = "id_pais", nullable = false)
+    @Column(name = "id_pais")
     private Integer idPais;
     private String nombre;
 }

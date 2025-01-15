@@ -1,11 +1,13 @@
 package com.hice.back.controller;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import com.hice.back.model.Proyecto;
 import com.hice.back.service.ProyectoService;
 
@@ -31,6 +34,14 @@ public class ProyectoController {
 	public ResponseEntity<Map<String, Object>> listarProyecto () {
 		return dao.listarProyectos();
 	}
+	@GetMapping("/{id}")
+	public ResponseEntity<Map<String, Object>> listarProyectoPorId (@PathVariable Integer id) {
+		return dao.listarProyectoPorId(id);
+	}
+	@GetMapping("/buscar")
+	public ResponseEntity<Map<String, Object>> buscarProyecto(@PathVariable Integer id){
+		return null;
+	}
 	@PostMapping()
 	public ResponseEntity<Map<String, Object>> CrearProyecto(@RequestParam("proyectoParam") String proyecto,
 			@RequestParam(value = "proyectoFile", required = false) MultipartFile file) throws IOException{
@@ -44,12 +55,23 @@ public class ProyectoController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Map<String, Object>> EditarProyecto(@PathVariable Integer id, @RequestParam("proyectoParam") String proyecto,
 			@RequestParam(value = "proyectoFile", required = false) MultipartFile file) throws IOException{
+		
+		JsonReader reader = new JsonReader(new StringReader(proyecto));
+		reader.setLenient(true);
 		Gson gson = new Gson();
-		Proyecto p = gson.fromJson(proyecto, Proyecto.class);
+		Proyecto p = gson.fromJson(reader, Proyecto.class);
 		
 		
 		
 		p.setIdUsuario(1);
 		return dao.EditarProyecto( p, file,id);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Map<String, Object>> EliminarProyecto(@PathVariable Integer id) throws IOException{
+		Proyecto proyecto = new Proyecto();
+		proyecto = dao.get(id).get();
+		String imgProyecto = proyecto.getImgProyecto();
+		return dao.EliminarProyecto(id, imgProyecto);
 	}
 }
