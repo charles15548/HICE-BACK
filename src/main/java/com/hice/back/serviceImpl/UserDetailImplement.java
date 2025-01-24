@@ -54,4 +54,8 @@ public class UserDetailImplement implements UserDetails{
 		return usuario.getNombre();
 	}
 	
+	public int getUserid() {
+		return usuario.getIdUsuario();
+	}
+	
 }

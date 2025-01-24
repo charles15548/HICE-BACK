@@ -47,18 +47,7 @@ public class AudioController {
 		return audioService.listarAudio();
 	}
 	
-/*	
- @GetMapping("/proyecto/{idProyecto}/personaje/{idPersonaje}")
-    public ResponseEntity<List<Audio>> getAudiosByProyectoAndPersonaje(
-            @PathVariable int idProyecto, 
-            @PathVariable int idPersonaje) {
-        List<Audio> audios = implement.getAudiosByProyectoAndPersonaje(idProyecto, idPersonaje);
-        if (audios.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(audios);
-    }
-    */
+
 	
 	
 	@GetMapping("/proyecto/{idProyecto}/personaje/{idPersonaje}")

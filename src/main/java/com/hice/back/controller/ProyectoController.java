@@ -6,6 +6,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.hice.back.model.Proyecto;
+import com.hice.back.model.Usuario;
+import com.hice.back.repository.UsuarioRepository;
 import com.hice.back.service.ProyectoService;
 
 @RestController
@@ -29,6 +34,8 @@ public class ProyectoController {
 
 	@Autowired
 	private ProyectoService dao;
+	@Autowired
+	private UsuarioRepository urepo;
 	
 	@GetMapping()
 	public ResponseEntity<Map<String, Object>> listarProyecto () {
@@ -38,6 +45,15 @@ public class ProyectoController {
 	public ResponseEntity<Map<String, Object>> listarProyectoPorId (@PathVariable Integer id) {
 		return dao.listarProyectoPorId(id);
 	}
+	@GetMapping("/usuario")
+	public ResponseEntity<Map<String, Object>> listarProyectoPorIdUsuario (Authentication authentication) {
+		String email= authentication.getName();
+		
+		Usuario usuario = urepo.findOneByEmail(email)
+				.orElseThrow(()-> new UsernameNotFoundException("Proyecto no encontrado"));
+		Integer idUsuario = usuario.getIdUsuario();
+		return dao.listarPorIdUsuario(idUsuario);
+	}
 	@GetMapping("/buscar")
 	public ResponseEntity<Map<String, Object>> buscarProyecto(@PathVariable Integer id){
 		return null;
@@ -45,10 +61,16 @@ public class ProyectoController {
 	@PostMapping()
 	public ResponseEntity<Map<String, Object>> CrearProyecto(@RequestParam("proyectoParam") String proyecto,
 			@RequestParam(value = "proyectoFile", required = false) MultipartFile file) throws IOException{
+		/*
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String email  = authentication.getName();
+	    Usuario usuario = urepo.findOneByEmail(email)
+				.orElseThrow(()-> new UsernameNotFoundException("Proyecto no encontrado"));
+		Integer idUsuario = usuario.getIdUsuario();
+		*/
 		Gson gson = new Gson();
 		Proyecto p = gson.fromJson(proyecto, Proyecto.class);
 		
-		p.setIdUsuario(1);
 		return dao.AgregarProyecto(p, file);
 	}
 	
@@ -63,7 +85,6 @@ public class ProyectoController {
 		
 		
 		
-		p.setIdUsuario(1);
 		return dao.EditarProyecto( p, file,id);
 	}
 	

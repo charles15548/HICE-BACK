@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import com.google.gson.stream.JsonReader;
 import com.hice.back.model.Usuario;
 import com.hice.back.repository.UsuarioRepository;
 import com.hice.back.service.UsuarioService;
+import com.hice.back.serviceImpl.UsuarioServiceImplement;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +48,9 @@ public class UsuarioController {
 		return usuarioService.listarUsuariosPorId(id);
 		
 	}
+	
+	
+	
 	@GetMapping("/logueado")
 	public ResponseEntity<Map<String, Object>> listarUsuarioPorUsuarioLogueado (Authentication authentication) {
 		String email = authentication.getName();
@@ -57,14 +62,14 @@ public class UsuarioController {
 	}
 	@PostMapping()
 	public ResponseEntity<Map<String, Object>> agregarUsuario(@RequestParam("usuarioParam") String usuario,
-		@RequestParam(value = "usuarioParam", required  = false) MultipartFile file) throws IOException{
+		@RequestParam(value = "usuarioFile", required  = false) MultipartFile file) throws IOException{
 		Gson gson = new Gson();
 		Usuario user = gson.fromJson(usuario, Usuario.class);
 		return usuarioService.AgregarUsuario(user, file);
 	}
 	@PutMapping("/{id}")
 	public ResponseEntity<Map<String, Object>> actualizarUsuario(@PathVariable Integer id,@RequestParam("usuarioParam") String usuario,
-			@RequestParam(value = "usuarioParam", required  = false) MultipartFile file) throws IOException{
+			@RequestParam(value = "usuarioFile", required  = false) MultipartFile file) throws IOException{
 			JsonReader reader = new JsonReader(new StringReader(usuario));
 			reader.setLenient(true);
 			Gson gson = new Gson();

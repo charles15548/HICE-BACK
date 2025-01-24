@@ -14,6 +14,7 @@ public interface ProyectoService {
 	public ResponseEntity<Map<String, Object>> listarProyectos();
 	public ResponseEntity<Map<String, Object>> listarProyectoPorId(Integer id);
 	public Optional<Proyecto> get(Integer id);
+	public ResponseEntity<Map<String, Object>> listarPorIdUsuario(Integer id);
 	public ResponseEntity<Map<String, Object>> EditarProyecto(Proyecto proyecto, MultipartFile file,Integer id) throws IOException;
 	public ResponseEntity<Map<String, Object>> EliminarProyecto(Integer id, String imgProyecto) throws IOException;
 	public ResponseEntity<Map<String, Object>> AgregarProyecto(Proyecto proyecto, MultipartFile file) throws IOException;

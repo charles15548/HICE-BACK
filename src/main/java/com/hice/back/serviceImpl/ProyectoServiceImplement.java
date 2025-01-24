@@ -65,6 +65,23 @@ public class ProyectoServiceImplement implements ProyectoService{
 		}
 	}
 
+	@Override
+	public ResponseEntity<Map<String, Object>> listarPorIdUsuario(Integer idUsuario) {
+		Map<String, Object> respuesta = new HashMap<>();
+		List<Proyecto> proyecto = dao.findByIdUsuario(idUsuario);
+		if(!proyecto.isEmpty()){
+			respuesta.put("mensaje", "lista de proyecto por usuario" + idUsuario);
+			respuesta.put("Proyecto", proyecto);
+			respuesta.put("status", HttpStatus.OK);
+			respuesta.put("fecha", new Date());
+			return ResponseEntity.status(HttpStatus.OK).body(respuesta);
+		}else {
+			respuesta.put("mensaje", "sin proyecto con el usuario "+ idUsuario);
+			respuesta.put("status", HttpStatus.NOT_FOUND);
+			respuesta.put("fecha", new Date());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(respuesta);
+		}
+	}
 	
 	@Override
 	public ResponseEntity<Map<String, Object>> EliminarProyecto(Integer id, String nombreProyecto) throws IOException {
@@ -213,5 +230,7 @@ public class ProyectoServiceImplement implements ProyectoService{
 	public Optional<Proyecto> get(Integer id) {
 		return dao.findById(id);
 	}
+
+	
 
 }

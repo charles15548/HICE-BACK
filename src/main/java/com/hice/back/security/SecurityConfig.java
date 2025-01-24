@@ -4,6 +4,7 @@ package com.hice.back.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,7 +41,9 @@ public class SecurityConfig {
 				.authorizeHttpRequests()
 				.antMatchers("/Archivo/Voz/**","file:./Archivo/Voz/",
 						"/Archivo/Proyecto/**","file:./Archivo/Proyecto/",
-						"/Archivo/Personaje/**", "file:./Archivo/Personaje").permitAll()
+						"/Archivo/Personaje/**", "file:./Archivo/Personaje",
+						"/Archivo/Usuario/**", "file:./Archivo/Usuario",
+						"/api/usuario").permitAll()
 				.anyRequest().authenticated()
 				.and()
 	            .httpBasic()

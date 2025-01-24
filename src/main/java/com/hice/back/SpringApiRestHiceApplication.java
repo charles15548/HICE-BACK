@@ -32,6 +32,8 @@ public class SpringApiRestHiceApplication {
 	            
 	            registry.addResourceHandler("/Archivo/Personaje/**")
 	            		.addResourceLocations("file:./Archivo/Personaje/");
+	            registry.addResourceHandler("/Archivo/Usuario/**")
+        		.addResourceLocations("file:./Archivo/Usuario/");
 	        }
 	    }
 
